@@ -213,39 +213,43 @@ export const Date = function () {
       this.element.date.appendChild(this.element.year);
     }
 
-    if (state.get.current().header.date.separator.show) {
-
+    // Insert separators between date parts
+    if (state.get.current().header.date.separator.show || (state.get.current().header.date.year.separator && state.get.current().header.date.year.separator.show)) {
       let separatorCharacter;
-
       if (isValidString(state.get.current().header.date.separator.text)) {
         separatorCharacter = trimString(state.get.current().header.date.separator.text);
       } else {
         separatorCharacter = '/';
       }
-
+      // Year separator logic
+      let yearSeparatorEnabled = state.get.current().header.date.year.separator && state.get.current().header.date.year.separator.show;
+      let yearSeparatorChar = '/';
+      if (yearSeparatorEnabled) {
+        if (isValidString(state.get.current().header.date.year.separator.text)) {
+          yearSeparatorChar = trimString(state.get.current().header.date.year.separator.text);
+        }
+      }
       let parts = this.element.date.querySelectorAll('span');
-
       if (parts.length > 1) {
-
         parts.forEach((item, i) => {
           if (i > 0) {
-
+            let sepChar = separatorCharacter;
+            // If this is the year and year separator is enabled, use year separator
+            if (yearSeparatorEnabled && item.classList.contains('date-year')) {
+              sepChar = yearSeparatorChar;
+            }
             let separator = complexNode({
               tag: 'span',
-              text: separatorCharacter,
+              text: sepChar,
               attr: [{
                 key: 'class',
                 value: 'date-item date-separator'
               }]
             });
-
             this.element.date.insertBefore(separator, item);
-
           }
         });
-
       }
-
     }
 
   };

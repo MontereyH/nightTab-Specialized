@@ -1364,54 +1364,10 @@ headerSetting.date = (parent) => {
     }
   });
 
-  headerSetting.control.date.year.separator = {};
-
-  headerSetting.control.date.year.separator.show = new Control_checkbox({
-    object: state.get.current(),
-    path: 'header.date.year.separator.show',
-    id: 'header-date-year-separator-show',
-    labelText: message.get('menuContentHeaderDateYearSeparatorShow'),
-    action: () => {
-      headerSetting.control.date.year.separator.collapse.update();
-      header.element.date.update();
-      data.save();
-    }
-  });
-
-  headerSetting.control.date.year.separator.text = new Control_textReset({
-    object: state.get.current(),
-    path: 'header.date.year.separator.text',
-    id: 'header-date-year-separator-text',
-    value: state.get.current().header?.date?.year?.separator?.text || '/',
-    defaultValue: '/',
-    placeholder: '/',
-    labelText: message.get('menuContentHeaderDateYearSeparatorLabel'),
-    srOnly: true,
-    action: () => {
-      header.element.date.update();
-      data.save();
-    }
-  });
-
-  headerSetting.control.date.year.separator.area = node('div', [
-    headerSetting.control.date.year.separator.text.wrap()
-  ]);
-
-  headerSetting.control.date.year.separator.collapse = new Collapse({
-    type: 'checkbox',
-    checkbox: headerSetting.control.date.year.separator.show,
-    target: [{
-      content: headerSetting.control.date.year.separator.area
-    }]
-  });
-
   headerSetting.control.date.year.area = node('div', [
-    headerSetting.control.date.year.display.wrap(),
-    headerSetting.control.date.year.separator.show.wrap(),
-    form.wrap({ children: [form.indent({ children: [headerSetting.control.date.year.separator.collapse.collapse()] })] })
+    headerSetting.control.date.year.display.wrap()
   ]);
 
-  // Add missing collapse for year
   headerSetting.control.date.year.collapse = new Collapse({
     type: 'checkbox',
     checkbox: headerSetting.control.date.year.show,
@@ -1439,7 +1395,23 @@ headerSetting.date = (parent) => {
       data.save();
     }
   });
-
+    headerSetting.control.date.separator.show = new Control_checkbox({
+    object: state.get.current(),
+    path: 'header.date.separator.show2',
+    id: 'header-date-separator-show2',
+    labelText: message.get('menuContentHeaderDateSeparatorShow2'),
+    action: () => {
+      header.element.date.update();
+      headerSetting.control.date.separator.collapse.update();
+      headerSetting.disable();
+      headerSetting.edge.greeting.size.update.primary(header.element.greeting.greeting());
+      headerSetting.edge.transitional.size.update.primary(header.element.transitional.transitional());
+      headerSetting.edge.clock.size.update.primary(header.element.clock.clock());
+      headerSetting.edge.date.size.update.primary(header.element.date.date());
+      headerSetting.edge.search.size.update.primary(header.element.search.search());
+      data.save();
+    }
+  });
 
   headerSetting.control.date.separator.text = new Control_textReset({
     object: state.get.current(),

@@ -1395,6 +1395,14 @@
     "message": "Force on to a new line and separate from other Header items.",
     "description": "Description for forcing date onto a new line."
   },
+  "menuContentHeaderDateYearSeparatorShow": {
+    "message": "Show year separator",
+    "description": "Checkbox label for showing a year separator in the header date settings."
+  },
+  "menuContentHeaderDateYearSeparatorLabel": {
+    "message": "Year separator",
+    "description": "Label for the year separator textbox in the header date settings."
+  },
   "menuContentHeaderSearchShow": {
     "message": "Show Search",
     "description": "Checkbox for search."
@@ -2194,10 +2202,6 @@
   "bookmarkFormDisplayNameTextPlaceholder": {
     "message": "Example",
     "description": "Placeholder for bookmark tile name."
-  },
-  "bookmarkFormDisplayNameSize": {
-    "message": "Name size",
-    "description": "Range for bookmark tile name size."
   },
   "bookmarkFormAccentByThemeLabel": {
     "message": "Theme Accent",
