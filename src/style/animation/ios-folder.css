@@ -1,0 +1,98 @@
+.is-ios-folder-collapsed {
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  min-height: 80px;
+  max-width: 80px;
+  max-height: 80px;
+  border-radius: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(.4,2,.6,1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--theme-primary-100, #fff);
+  cursor: pointer;
+}
+
+.is-ios-folder-open {
+  width: var(--app-region-width, 480px);
+  min-width: 320px;
+  max-width: 90vw;
+  height: var(--app-region-height, 320px);
+  min-height: 200px;
+  max-height: 80vh;
+  border-radius: 32px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  background: var(--theme-primary-100, #fff);
+  transition: all 0.3s cubic-bezier(.4,2,.6,1);
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  animation: ios-folder-floaty-in 0.35s cubic-bezier(.4,2,.6,1);
+}
+
+.ios-folder-floaty {
+  animation: ios-folder-floaty-in 0.35s cubic-bezier(.4,2,.6,1);
+}
+
+@keyframes ios-folder-floaty-in {
+  0% {
+    transform: scale(0.85) translateY(40px);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.ios-folder-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: rgba(0,0,0,0.08);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.5em;
+  color: #333;
+  cursor: pointer;
+  z-index: 101;
+  transition: background 0.2s;
+}
+.ios-folder-close-btn:hover {
+  background: rgba(0,0,0,0.18);
+}
+
+.is-ios-folder-open .group-body {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-gap: 18px;
+  padding: 48px 32px 32px 32px;
+  position: relative;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.is-ios-folder-collapsed .group-body {
+  display: none !important;
+}
+
+.group-folder-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: var(--theme-primary-090, #e0e0e0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  margin: 0 auto;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}

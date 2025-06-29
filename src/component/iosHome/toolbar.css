@@ -1,0 +1,31 @@
+.ios-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 48px;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 10000;
+  padding: 0 24px;
+}
+.ios-toolbar-btn {
+  background: none;
+  border: none;
+  font-size: 1.6em;
+  margin-left: 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.ios-toolbar-btn:hover {
+  background: #f0f0f0;
+}

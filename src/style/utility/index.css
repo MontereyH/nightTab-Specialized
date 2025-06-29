@@ -4,6 +4,8 @@
   --utility-muted-focus-active: var(--theme-primary-110);
   --utility-muted-checked: var(--theme-primary-110);
   --utility-muted-disabled: var(--theme-primary-030);
+  --app-region-width: 480px;
+  --app-region-height: 320px;
 }
 
 .list-unstyled {

@@ -16,6 +16,9 @@ import { node } from '../../utility/node';
 import { isValidString } from '../../utility/isValidString';
 import { clearChildNode } from '../../utility/clearChildNode';
 
+import './index.css';
+import './ios-folder.css';
+
 export const GroupArea = function({
   groupData = {}
 } = {}) {
@@ -37,7 +40,8 @@ export const GroupArea = function({
       toolbar: node('div|class:group-toolbar'),
       group: node('div|class:group-toolbar-group form-group form-group-horizontal')
     },
-    body: node('div|class:group-body')
+    body: node('div|class:group-body'),
+    folderIcon: node('div|class:group-folder-icon')
   };
 
   this.control = {};
@@ -184,29 +188,20 @@ export const GroupArea = function({
       }
     }),
     open: () => {
-
-      if ('tabs' in chrome) {
-
+      // Open all bookmarks in new tabs (browser-agnostic, fallback to window.open)
+      if (typeof window !== 'undefined') {
         if (state.get.current().bookmark.newTab) {
-
           groupData.group.items.forEach((item) => {
-            chrome.tabs.create({ url: item.url });
+            window.open(item.url, '_blank');
           });
-
         } else {
-
-          const first = groupData.group.items.shift();
-
-          groupData.group.items.forEach((item) => {
-            chrome.tabs.create({ url: item.url });
+          const first = groupData.group.items[0];
+          groupData.group.items.slice(1).forEach((item) => {
+            window.open(item.url, '_blank');
           });
-
           window.location.href = first.url;
-
         }
-
       }
-
     }
   };
 
@@ -351,6 +346,73 @@ export const GroupArea = function({
       this.control.disable();
     }
 
+    // Add collapsed/expanded state
+    if (typeof groupData.group.iosCollapsed === 'undefined') {
+      groupData.group.iosCollapsed = true;
+    }
+
+    // Animation helpers
+    const openFolder = () => {
+      groupData.group.iosCollapsed = false;
+      this.element.group.classList.add('is-ios-folder-open');
+      this.element.group.classList.remove('is-ios-folder-collapsed');
+      this.element.body.style.display = 'grid';
+      setTimeout(() => {
+        this.element.body.classList.add('ios-folder-floaty');
+      }, 10);
+    };
+    const closeFolder = () => {
+      groupData.group.iosCollapsed = true;
+      this.element.group.classList.remove('is-ios-folder-open');
+      this.element.group.classList.add('is-ios-folder-collapsed');
+      this.element.body.classList.remove('ios-folder-floaty');
+      setTimeout(() => {
+        this.element.body.style.display = 'none';
+      }, 300); // match CSS transition
+    };
+
+    // Initial state
+    if (groupData.group.iosCollapsed) {
+      this.element.group.classList.add('is-ios-folder-collapsed');
+      this.element.body.style.display = 'none';
+    } else {
+      this.element.group.classList.add('is-ios-folder-open');
+      this.element.body.style.display = 'grid';
+      this.element.body.classList.add('ios-folder-floaty');
+    }
+
+    // Click to open/close
+    this.element.folderIcon.onclick = () => openFolder();
+    this.element.header.appendChild(this.element.folderIcon);
+
+    // Add close button inside expanded folder
+    this.element.closeBtn = node('button|class:ios-folder-close-btn');
+    this.element.closeBtn.innerHTML = '×';
+    this.element.closeBtn.onclick = () => closeFolder();
+    this.element.body.appendChild(this.element.closeBtn);
+
+    // Clicking outside closes folder
+    document.addEventListener('mousedown', (e) => {
+      if (!this.element.group.contains(e.target) && !groupData.group.iosCollapsed) {
+        closeFolder();
+      }
+    });
+
+    this.element.folderIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="24" height="14" rx="4" fill="#bbb"/><rect x="4" y="8" width="10" height="6" rx="2" fill="#ccc"/></svg>';
+
+    // Always render bookmarks in the group body (for now, for debug/UX)
+    if (groupData.group.items && groupData.group.items.length > 0) {
+      groupData.group.items.forEach((bookmarkData, bookmarkIndex) => {
+        const currentBookmarkData = new (require('../stagedBookmark').StagedBookmark)(bookmarkData);
+        currentBookmarkData.position.origin.group = groupData.position.origin;
+        currentBookmarkData.position.origin.item = bookmarkIndex;
+        currentBookmarkData.position.destination.group = groupData.position.origin;
+        currentBookmarkData.position.destination.item = bookmarkIndex;
+        const BookmarkTile = require('../bookmarkTile').BookmarkTile;
+        const bookmarkTile = new BookmarkTile({ bookmarkData: currentBookmarkData });
+        this.element.body.appendChild(bookmarkTile.tile());
+      });
+    }
   };
 
   this.clear = () => {

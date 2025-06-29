@@ -8,6 +8,7 @@ import { APP_NAME } from '../../../constant';
 
 import { Link } from '../../link';
 import { Splash } from '../../splash';
+import { Control_slider } from '../../control/slider';
 
 const appSetting = {};
 
@@ -36,6 +37,40 @@ appSetting.app = (parent) => {
   });
 
   const splash = new Splash();
+
+  // App region size controls
+  appSetting.app.regionSizeLabel = node('label|for:app-region-width-slider|class:app-region-size-label');
+  appSetting.app.regionSizeLabel.innerText = message.get('menuContentAppRegionSizeLabel') || 'App Region Size';
+
+  appSetting.app.regionWidth = new Control_slider({
+    object: state.get.current(),
+    path: 'app.region.width',
+    id: 'app-region-width-slider',
+    labelText: message.get('menuContentAppRegionWidthLabel') || 'Width',
+    value: state.get.current().app?.region?.width || 480,
+    defaultValue: 480,
+    min: 320,
+    max: 1200,
+    action: () => {
+      document.documentElement.style.setProperty('--app-region-width', state.get.current().app.region.width + 'px');
+      data.save();
+    }
+  });
+
+  appSetting.app.regionHeight = new Control_slider({
+    object: state.get.current(),
+    path: 'app.region.height',
+    id: 'app-region-height-slider',
+    labelText: message.get('menuContentAppRegionHeightLabel') || 'Height',
+    value: state.get.current().app?.region?.height || 320,
+    defaultValue: 320,
+    min: 200,
+    max: 900,
+    action: () => {
+      document.documentElement.style.setProperty('--app-region-height', state.get.current().app.region.height + 'px');
+      data.save();
+    }
+  });
 
   parent.appendChild(
     node('div', [
@@ -67,7 +102,11 @@ appSetting.app = (parent) => {
             ]
           })
         ]
-      })
+      }),
+      appSetting.app.regionSizeLabel,
+      appSetting.app.regionWidth.wrap(),
+      appSetting.app.regionHeight.wrap(),
+      node('hr')
     ])
   );
 

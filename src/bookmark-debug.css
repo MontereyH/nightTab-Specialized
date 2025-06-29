@@ -1,0 +1,10 @@
+.bookmark {
+  border: 2px solid red !important;
+  background: #fffae0 !important;
+  min-width: 200px;
+  min-height: 100px;
+  margin: 32px;
+  color: #222;
+  font-size: 2em;
+  z-index: 10000;
+}

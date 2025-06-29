@@ -1,0 +1,183 @@
+.ios-home-root {
+  width: 100vw;
+  min-height: 100vh;
+  position: relative;
+}
+
+.ios-home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 24px;
+  padding: 64px 24px 24px 24px;
+  min-height: 100vh;
+  transition: grid-template-columns 0.2s;
+}
+
+.ios-app-icon, .ios-folder-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 28%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  width: var(--icon-size, 100px);
+  height: var(--icon-size, 100px);
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+  will-change: transform;
+}
+.ios-app-icon:hover, .ios-folder-icon:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.16);
+  transform: scale(1.06);
+}
+.ios-app-icon.drag-over, .ios-folder-icon.drag-over {
+  outline: 2px solid #007aff;
+  z-index: 2;
+  /* Optionally scale up the drop target */
+  transform: scale(1.08);
+}
+.ios-app-icon-img, .ios-folder-img {
+  font-size: var(--icon-font-size, 48px);
+  margin-bottom: 6px;
+  color: inherit;
+}
+.ios-app-label {
+  font-size: var(--label-font-size, 18px);
+  color: #222;
+  margin-top: 2px;
+  text-align: center;
+  max-width: 80px;
+  word-break: break-word;
+}
+.ios-toolbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  min-width: 220px;
+  max-width: 90vw;
+  height: 48px;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 0 24px;
+  border-radius: 24px;
+}
+.ios-folder-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.18);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ios-floaty-in 0.3s cubic-bezier(.4,2,.6,1);
+}
+.ios-folder-modal.drag-over-bg {
+  background: rgba(0, 122, 255, 0.18);
+  transition: background 0.2s;
+}
+.ios-folder-modal-inner {
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 40px 40px 32px 40px;
+  min-width: 420px;
+  max-width: 98vw;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  font-size: 1.08em;
+}
+.ios-folder-modal-title {
+  font-size: 1.35em;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+.ios-folder-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  background: rgba(0,0,0,0.08);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.5em;
+  color: #333;
+  cursor: pointer;
+  z-index: 101;
+  transition: background 0.2s;
+}
+.ios-folder-modal-close:hover {
+  background: rgba(0,0,0,0.18);
+}
+.ios-folder-modal-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.ios-folder-modal-grid label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  margin-top: 8px;
+  font-size: 1em;
+}
+.ios-folder-modal-grid input[type="text"],
+.ios-folder-modal-grid input[type="url"],
+.ios-folder-modal-grid input[type="color"],
+.ios-folder-modal-grid input[type="range"] {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+.ios-folder-modal-grid input[type="radio"],
+.ios-folder-modal-grid input[type="checkbox"] {
+  margin-right: 8px;
+  margin-left: 4px;
+}
+.ios-folder-modal-grid button {
+  margin-top: 18px;
+  padding: 12px 24px;
+  font-size: 1.08em;
+  border-radius: 8px;
+  border: none;
+  background: #007aff;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.ios-folder-modal-grid button:hover {
+  background: #005ecb;
+}
+@keyframes ios-floaty-in {
+  0% { transform: scale(0.85) translateY(40px); opacity: 0.2; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+@media (max-width: 600px) {
+  .ios-folder-modal-inner {
+    min-width: 98vw;
+    padding: 16px 4vw 16px 4vw;
+  }
+  .ios-folder-modal-grid {
+    max-width: 98vw;
+    gap: 12px;
+  }
+}

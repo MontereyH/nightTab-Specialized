@@ -1,291 +1,38 @@
 import { state } from '../state';
-
 import { node } from '../../utility/node';
-import { ordinalWord } from '../../utility/ordinalWord';
-import { wordNumber } from '../../utility/wordNumber';
-import { trimString } from '../../utility/trimString';
-import { isValidString } from '../../utility/isValidString';
-import { complexNode } from '../../utility/complexNode';
 import { clearChildNode } from '../../utility/clearChildNode';
-
-import moment from 'moment';
 
 import './index.css';
 
 export const Date = function () {
-
-  this.now;
-
-  this.bind = {};
-
-  this.bind.tick = () => {
-
-    window.setInterval(() => {
-      this.update();
-    }, 1000);
-
-  };
-
+  this.now = new Date();
   this.element = {
-    date: node('div|class:date'),
-    day: node('span|class:date-item date-day'),
-    dateOfMonth: node('span|class:date-item date-date'),
-    month: node('span|class:date-item date-month'),
-    year: node('span|class:date-item date-year')
-  };
-
-  this.string = {};
-
-  this.string.day = () => {
-
-    let value;
-
-    switch (state.get.current().header.date.day.display) {
-
-      case 'word':
-
-        value = this.now.format('dddd');
-
-        if (state.get.current().header.date.day.length == 'short') {
-          value = value.substring(0, 3);
-        }
-
-        break;
-
-      case 'number':
-
-        value = this.now.day();
-
-        if (state.get.current().header.date.day.weekStart == 'monday') {
-          if (value == 0) {
-            value = 7;
-          }
-        } else if (state.get.current().header.date.day.weekStart == 'sunday') {
-          value = value + 1;
-        }
-
-        break;
-
-    }
-
-    return value;
-
-  };
-
-  this.string.dateOfMonth = () => {
-
-    let value;
-
-    switch (state.get.current().header.date.date.display) {
-
-      case 'word':
-
-        if (state.get.current().header.date.date.ordinal) {
-          value = ordinalWord(wordNumber(this.now.date()));
-        } else {
-          value = wordNumber(this.now.date());
-        }
-
-        break;
-
-      case 'number':
-
-        if (state.get.current().header.date.date.ordinal) {
-          value = this.now.format('Do');
-        } else {
-          value = this.now.format('D');
-        }
-
-        break;
-
-    }
-
-    return value;
-
-  };
-
-  this.string.month = () => {
-
-    let value;
-
-    switch (state.get.current().header.date.month.display) {
-
-      case 'word':
-
-        value = this.now.format('MMMM');
-        if (state.get.current().header.date.month.length == 'short') {
-          value = value.substring(0, 3);
-        }
-
-        break;
-
-      case 'number':
-
-        if (state.get.current().header.date.month.ordinal) {
-          value = this.now.format('Mo');
-        } else {
-          value = this.now.format('M');
-        }
-
-        break;
-
-    }
-
-    return value;
-
-  };
-
-  this.string.year = () => {
-
-    let value;
-
-    switch (state.get.current().header.date.year.display) {
-
-      case 'word':
-
-        value = wordNumber(this.now.format('YYYY'));
-
-        break;
-
-      case 'number':
-
-        value = this.now.format('YYYY');
-
-        break;
-
-    }
-
-    return value;
-
-  };
-
-  this.assemble = () => {
-
-    clearChildNode(this.element.date);
-
-    if (state.get.current().header.date.day.show) {
-      this.element.date.appendChild(this.element.day);
-    }
-
-    if (state.get.current().header.date.date.show && state.get.current().header.date.month.show) {
-
-      switch (state.get.current().header.date.format) {
-
-        case 'date-month':
-
-          if (state.get.current().header.date.date.show) {
-            this.element.date.appendChild(this.element.dateOfMonth);
-          }
-
-          if (state.get.current().header.date.month.show) {
-            this.element.date.appendChild(this.element.month);
-          }
-
-          break;
-
-        case 'month-date':
-
-          if (state.get.current().header.date.month.show) {
-            this.element.date.appendChild(this.element.month);
-          }
-
-          if (state.get.current().header.date.date.show) {
-            this.element.date.appendChild(this.element.dateOfMonth);
-          }
-
-          break;
-
-      }
-
-    } else {
-
-      if (state.get.current().header.date.date.show) {
-        this.element.date.appendChild(this.element.dateOfMonth);
-      }
-
-      if (state.get.current().header.date.month.show) {
-        this.element.date.appendChild(this.element.month);
-      }
-
-    }
-
-    if (state.get.current().header.date.year.show) {
-      this.element.date.appendChild(this.element.year);
-    }
-
-    // Insert separators between date parts
-    if (state.get.current().header.date.separator.show || (state.get.current().header.date.year.separator && state.get.current().header.date.year.separator.show)) {
-      let separatorCharacter;
-      if (isValidString(state.get.current().header.date.separator.text)) {
-        separatorCharacter = trimString(state.get.current().header.date.separator.text);
-      } else {
-        separatorCharacter = '/';
-      }
-      // Year separator logic
-      let yearSeparatorEnabled = state.get.current().header.date.year.separator && state.get.current().header.date.year.separator.show;
-      let yearSeparatorChar = '/';
-      if (yearSeparatorEnabled) {
-        if (isValidString(state.get.current().header.date.year.separator.text)) {
-          yearSeparatorChar = trimString(state.get.current().header.date.year.separator.text);
-        }
-      }
-      let parts = this.element.date.querySelectorAll('span');
-      if (parts.length > 1) {
-        parts.forEach((item, i) => {
-          if (i > 0) {
-            let sepChar = separatorCharacter;
-            // If this is the year and year separator is enabled, use year separator
-            if (yearSeparatorEnabled && item.classList.contains('date-year')) {
-              sepChar = yearSeparatorChar;
-            }
-            let separator = complexNode({
-              tag: 'span',
-              text: sepChar,
-              attr: [{
-                key: 'class',
-                value: 'date-item date-separator'
-              }]
-            });
-            this.element.date.insertBefore(separator, item);
-          }
-        });
-      }
-    }
-
+    date: node('div|class:date-ios'),
+    day: node('span|class:date-ios-day'),
+    dateOfMonth: node('span|class:date-ios-date'),
+    month: node('span|class:date-ios-month'),
+    year: node('span|class:date-ios-year')
   };
 
   this.update = () => {
+    this.now = new Date();
+    this.element.day.textContent = this.now.toLocaleDateString(undefined, { weekday: 'short' });
+    this.element.dateOfMonth.textContent = this.now.getDate();
+    this.element.month.textContent = this.now.toLocaleDateString(undefined, { month: 'short' });
+    this.element.year.textContent = this.now.getFullYear();
+  };
 
-    this.assemble();
-
-    this.now = moment();
-
-    if (state.get.current().header.date.day.show) {
-      this.element.day.innerHTML = this.string.day();
-    }
-
-    if (state.get.current().header.date.date.show) {
-      this.element.dateOfMonth.innerHTML = this.string.dateOfMonth();
-    }
-
-    if (state.get.current().header.date.month.show) {
-      this.element.month.innerHTML = this.string.month();
-    }
-
-    if (state.get.current().header.date.year.show) {
-      this.element.year.innerHTML = this.string.year();
-    }
-
+  this.assemble = () => {
+    clearChildNode(this.element.date);
+    this.element.date.appendChild(this.element.day);
+    this.element.date.appendChild(this.element.dateOfMonth);
+    this.element.date.appendChild(this.element.month);
+    this.element.date.appendChild(this.element.year);
   };
 
   this.assemble();
-
   this.update();
+  setInterval(this.update, 1000 * 60); // update every minute
 
-  this.bind.tick();
-
-  this.date = () => {
-    return this.element.date;
-  };
-
+  this.date = () => this.element.date;
 };

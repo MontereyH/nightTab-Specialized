@@ -1,27 +1,10 @@
-import { component } from './component';
+import './component/iosHome/index.css';
+import { IOSHome } from './component/iosHome/index.js';
+import { initialItems } from './component/iosHome/index.js';
 
-import { APP_NAME } from './constant';
-
-console.log(APP_NAME + ' version:', component.version.number, component.version.name);
-
-component.data.init();
-
-component.theme.init();
-
-component.layout.init();
-
-component.toolbar.init();
-
-component.header.init();
-
-component.group.init();
-
-component.bookmark.init();
-
-component.groupAndBookmark.init();
-
-component.pageLock.init();
-
-component.keyboard.init();
-
-// component.menu.open();
+window.addEventListener('DOMContentLoaded', () => {
+  const root = document.getElementById('root') || document.body;
+  root.innerHTML = '';
+  const iosHome = new IOSHome({ items: initialItems });
+  root.appendChild(iosHome.element);
+});
