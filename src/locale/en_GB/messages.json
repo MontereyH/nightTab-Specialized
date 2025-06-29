@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "nightTab",
+    "message": "nightTab Specialized",
     "description": "The name of the extension, displayed in the web store."
   },
   "appShortName": {
@@ -8,7 +8,7 @@
     "description": "The name of the extension, displayed in the web store."
   },
   "appDescription": {
-    "message": "A neutral new tab page accented with a chosen colour. Customise the layout, style, background and bookmarks in nightTab.",
+    "message": "A neutral new tab page accented with a chosen colour. Customise the layout, style, background and bookmarks in nightTab. Specialized modifications and quality of life features by MontereyH",
     "description": "The description of the extension, displayed in the web store."
   },
   "menuNavDebugLabel": {
